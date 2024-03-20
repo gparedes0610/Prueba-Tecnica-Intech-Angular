@@ -1,0 +1,70 @@
+
+<app-gestion-tareas-title [title]="title"></app-gestion-tareas-title>
+<form [formGroup]="taskForm" (ngSubmit)="onSubmit()" class="p-fluid" style="margin-bottom: 35px;">
+  <div class="p-field">
+    <label for="title">Título</label>
+    <input id="title" type="text" pInputText formControlName="title" class="p-inputtext">
+    <small *ngIf="taskForm.controls['title'].errors && taskForm.controls['title'].touched" class="p-error">El título es requerido</small>
+  </div>
+  <div class="p-field">
+    <label for="description">Descripción</label>
+    <textarea id="description" pInputTextarea formControlName="description" class="p-inputtext"></textarea>
+    <small *ngIf="taskForm.controls['description'].errors && taskForm.controls['description'].touched" class="p-error">Descripción es requerida</small>
+  </div>
+  <div class="p-field">
+    <label for="dueDate">Fecha de vencimiento</label>
+    <input id="dueDate" type="date" pInputText formControlName="dueDate" class="p-inputtext">
+    <small *ngIf="taskForm.controls['dueDate'].errors && taskForm.controls['dueDate'].touched" class="p-error">Fecha es requerida</small>
+  </div>
+  <div class="p-field">
+    <label for="priority">Prioridad</label>
+    <p-dropdown formControlName="priority" [options]="priorities" optionLabel="label" id="priority" [showClear]="true" class=""></p-dropdown>
+    <small *ngIf="taskForm.controls['priority'].errors && taskForm.controls['priority'].touched" class="p-error">Prioridad es requerida</small>
+  </div>
+  <div class="p-field">
+    <label for="priority">Estado</label>
+    <p-dropdown formControlName="state" [options]="state" optionLabel="label" id="state" [showClear]="true" class=""></p-dropdown>
+    <small *ngIf="taskForm.controls['state'].errors && taskForm.controls['state'].touched" class="p-error">Estado es requerida</small>
+  </div>
+  <div class="p-field">
+    <label for="tags">Etiquetas</label>
+    <input id="tags" type="text" pInputText formControlName="tags" class="p-inputtext">
+  </div>
+  <button type="submit" pButton [label]="this.selectedTask? 'Editar tarea': 'Guardar tarea'" [disabled]="!taskForm.valid" [class]="this.selectedTask? 'p-button-success': ''"></button>
+</form>
+<ng-container *ngIf="tasks.length >0">
+  <div class="p-field">
+    <p>Filtros:</p>
+    <p-dropdown [options]="priorities" optionLabel="label" [(ngModel)]="selectedPriority" id="filterPriority" [showClear]="true" class="" placeholder="Seleccione una prioridad"></p-dropdown>
+    <p-dropdown [options]="state" optionLabel="label" [(ngModel)]="selectedState" id="filterPriority" [showClear]="true" class="" placeholder="Seleccione un Estado"></p-dropdown>
+  </div>
+  <p-table [value]="filterTasksByPriorityAndState()">
+    <ng-template pTemplate="header">
+      <tr>
+        <th>Estado</th>
+        <th>Título</th>
+        <th>Descripción</th>
+        <th>Fecha de Vencimiento</th>
+        <th>Prioridad</th>
+        <th>Etiquetas</th>
+        <th>Acciones</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-task>
+      <tr>
+        <td><p-badge [value]="task.state.label" [severity]="task.state.label === 'Pendiente' ? 'warning' : 'success'"></p-badge></td>
+        <td>{{ task.title }}</td>
+        <td>{{ task.description }}</td>
+        <td>{{ task.dueDate }}</td>
+        <td><p-badge [value]="task.priority.label" [severity]="getBadgeSeverity(task.priority.label)"></p-badge></td>
+        <td>{{ task.tags }}</td>
+        <td>
+          <button pButton icon="pi pi-pencil" (click)="editTask(task)" class="p-button-rounded p-button-success" style="margin-right: 15px;"></button>
+          <button pButton icon="pi pi-trash" (click)="deleteTask(task)" class="p-button-rounded p-button-danger"></button>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+<p-toast></p-toast>
+</ng-container>
+

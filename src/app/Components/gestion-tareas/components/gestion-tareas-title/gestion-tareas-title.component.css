@@ -1,0 +1,12 @@
+.custom-toolbar {
+    background-color: #007bff; /* Cambia el color de fondo según tus preferencias */
+    text-align: center; /* Centra el contenido del toolbar */
+  }
+  
+  .custom-title {
+    color: black; /* Cambia el color del texto según tus preferencias */
+    font-size: 20px; /* Ajusta el tamaño del texto según tus preferencias */
+    font-weight: bold; /* Opcional: establece el peso de la fuente como negrita */
+    text-align: center;
+    width: 100%;
+  }
